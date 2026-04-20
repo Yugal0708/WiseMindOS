@@ -24,18 +24,18 @@ const dailyStatsSchema = new mongoose.Schema({
 
 }, { minimize: false });
 
-// ✅ unique per day
+// unique per day
 dailyStatsSchema.index({ userId: 1, date: 1 }, { unique: true });
 
-// ✅ auto delete after 7 days
+// auto delete after 7 days
 dailyStatsSchema.index(
   { date: 1 },
   { expireAfterSeconds: 7 * 24 * 60 * 60 }
 );
 
-// ✅ CREATE MODEL (IMPORTANT)
+// CREATE MODEL (IMPORTANT)
 const dailyStatsModel =
   mongoose.models.dailyStats || mongoose.model('dailyStats', dailyStatsSchema);
 
-// ✅ EXPORT DEFAULT (IMPORTANT)
+// EXPORT DEFAULT (IMPORTANT)
 export default dailyStatsModel;

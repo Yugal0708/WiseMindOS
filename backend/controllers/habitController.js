@@ -90,62 +90,6 @@ const updateHabit = async (req, res) => {
     }
 };
 
-// Complete Habit (SSOT - Updates Habit with streak logic, then DailyPlan)
-// const completeHabit = async (req, res) => {
-//     try {
-//         const { habitId } = req.body;
-//         const userId = req.body.userId;
-
-//         if (!habitId) {
-//             return res.json({ success: false, message: 'Habit ID is required' });
-//         }
-
-//         // SOURCE OF TRUTH: Update Habit first
-//         const habit = await habitModel.findOne({ _id: habitId, userId });
-//         if (!habit) {
-//             return res.json({ success: false, message: 'Habit not found' });
-//         }
-
-//         // CRITICAL STREAK LOGIC
-//         if (habit.lastCompleted && isToday(habit.lastCompleted)) {
-//             // Already completed today - do nothing
-//             return res.json({ success: true, habit, message: 'Already completed today' });
-//         }
-
-//         if (habit.lastCompleted && isYesterday(habit.lastCompleted)) {
-//             // Completed yesterday - increment streak
-//             habit.streak += 1;
-//         } else {
-//             // Streak broken or first time - reset to 1
-//             habit.streak = 1;
-//         }
-
-//         habit.lastCompleted = new Date();
-//         await habit.save();
-
-//         // SYNC: Update in DailyPlan if exists
-//         const today = new Date().toISOString().split('T')[0];
-//         const dailyPlan = await dailyPlanModel.findOne({ userId, date: today });
-        
-//         if (dailyPlan) {
-//             const plannedHabit = dailyPlan.plannedTasks.find(pt => 
-//                 pt.source === 'habit' && pt.habitId && pt.habitId.toString() === habitId
-//             );
-            
-//             if (plannedHabit) {
-//                 plannedHabit.completed = true;
-//                 await dailyPlan.save();
-//             }
-//         }
-
-//         res.json({ success: true, habit });
-
-//     } catch (error) {
-//         console.log(error);
-//         res.json({ success: false, message: error.message });
-//     }
-// };
-
 const completeHabit = async (req, res) => {
     try {
         const { habitId } = req.body;
@@ -164,7 +108,7 @@ const completeHabit = async (req, res) => {
         const todayStr = today.toISOString().split('T')[0];
 
         // =============================
-        // 🔁 TOGGLE OFF (UNDO)
+        // TOGGLE OFF (UNDO)
         // =============================
         if (habit.lastCompleted && isToday(habit.lastCompleted)) {
 
@@ -205,7 +149,7 @@ const completeHabit = async (req, res) => {
         }
 
         // =============================
-        // ✅ TOGGLE ON (COMPLETE)
+        // TOGGLE ON (COMPLETE)
         // =============================
 
         if (habit.lastCompleted && isYesterday(habit.lastCompleted)) {

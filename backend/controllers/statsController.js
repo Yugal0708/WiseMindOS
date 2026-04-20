@@ -1,6 +1,6 @@
 import dailyStatsModel from '../models/dailyStatsModel.js';
 
-// ✅ SAVE TODAY'S STATS
+// SAVE TODAY'S STATS
 const saveDailyStats = async (req, res) => {
   try {
     const { productivity, discipline } = req.body;

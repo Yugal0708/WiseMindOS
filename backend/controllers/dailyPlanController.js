@@ -184,35 +184,17 @@ const toggleDailyPlanTask = async (req, res) => {
         } else if (plannedTask.source === 'habit' && plannedTask.habitId) {
             const habit = await habitModel.findOne({ _id: plannedTask.habitId, userId });
             if (habit) {
-                // Check if already completed today
-                // if (habit.lastCompleted && isToday(habit.lastCompleted)) {
-                //     // Already completed - do nothing or toggle off
-                //     if (plannedTask.completed) {
-                //         plannedTask.completed = false;
-                //     }
-                // } else {
-                //     // Complete habit with streak logic
-                //     if (habit.lastCompleted && isYesterday(habit.lastCompleted)) {
-                //         habit.streak += 1;
-                //     } else {
-                //         habit.streak = 1;
-                //     }
-                //     habit.lastCompleted = new Date();
-                //     await habit.save();
-                //     plannedTask.completed = true;
-                //     plannedTask.completedAt = new Date();
-                // }
 
                 if (habit.lastCompleted && isToday(habit.lastCompleted)) {
-                    // 🔁 UNTOGGLE (VERY IMPORTANT FIX)
+                    // UNTOGGLE (VERY IMPORTANT FIX)
 
                     plannedTask.completed = false;
                     plannedTask.completedAt = null;
 
-                    // 🔁 rollback streak
+                    // rollback streak
                     habit.streak = habit.streak > 0 ? habit.streak - 1 : 0;
 
-                    // 🔁 fix lastCompleted
+                    // fix lastCompleted
                     if (habit.streak === 0) {
                         habit.lastCompleted = null;
                     } else {
@@ -224,7 +206,7 @@ const toggleDailyPlanTask = async (req, res) => {
                     await habit.save();
 
                 } else {
-                    // ✅ COMPLETE habit
+                    // COMPLETE habit
 
                     if (habit.lastCompleted && isYesterday(habit.lastCompleted)) {
                         habit.streak += 1;
