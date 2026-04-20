@@ -25,9 +25,7 @@ const Login = () => {
       setError('Please fill in all fields');
       return;
     }
-
-
-
+    
     try {
       const response = await authAPI.login(formData);
 

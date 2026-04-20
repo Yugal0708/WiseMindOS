@@ -36,8 +36,6 @@ const SoloTaskTracker = () => {
     setShowAddTask(false);
   };
 
-  // Filter tasks
-  // let filteredTasks = tasks.filter(task => !task.projectId || task.createdFrom === 'solo');
   let filteredTasks = tasks;
 
 

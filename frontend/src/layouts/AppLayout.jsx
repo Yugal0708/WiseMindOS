@@ -5,7 +5,7 @@ import { useApp } from '../store/AppContext';
 const AppLayout = () => {
   const { token } = useApp();
 
-  // 🔒 Protect all routes inside this layout
+  // Protect all routes inside this layout
   if (!token) {
     return <Navigate to="/login" replace />;
   }

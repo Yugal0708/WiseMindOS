@@ -199,14 +199,14 @@ const Dashboard = () => {
           <Card className="bg-white/5 backdrop-blur-lg border border-white/10 hover:scale-[1.02] transition-all duration-300">
             <h3 className="text-lg font-semibold text-white mb-4">Productivity Score</h3>
             <div className="flex justify-center">
-              <DonutChart value={avgProductivity} size={140} color="#6366f1" label="This Week" />
+              <DonutChart value={avgProductivity} size={140} color="#7C3AED" label="This Week" />
             </div>
           </Card>
 
           <Card className="bg-white/5 backdrop-blur-lg border border-white/10 hover:scale-[1.02] transition-all duration-300">
             <h3 className="text-lg font-semibold text-white mb-4">Discipline Score</h3>
             <div className="flex justify-center">
-              <DonutChart value={avgDiscipline} size={140} color="#10b981" label="This Week" />
+              <DonutChart value={avgDiscipline} size={140} color="#10B981" label="This Week" />
             </div>
           </Card>
 

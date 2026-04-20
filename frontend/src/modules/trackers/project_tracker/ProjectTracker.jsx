@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Plus, ArrowLeft, Target } from 'lucide-react';
 import { useApp } from '../../../store/AppContext';
 import Card from '../../../components/Card';
@@ -12,10 +11,10 @@ import DonutChart from '../../../components/DonutChart';
 import { motion } from 'framer-motion';
 
 const ProjectTracker = () => {
-  const navigate = useNavigate();
   const {
     projects,
     goals,
+    navigate,
     addProject,
     calculateProjectProgress,
     getTasksByProject,

@@ -16,7 +16,6 @@ const GoalTracker = () => {
   const navigate = useNavigate();
   const {
     goals,
-    projects,
     addGoal,
     addProject,
     addTask,
@@ -77,7 +76,6 @@ const GoalTracker = () => {
   };
 
   const handleGoalClick = (goal) => {
-    // console.log("Clicked:", goal);
     setSelectedGoal(goal);
   };
 
@@ -361,21 +359,6 @@ const GoalTracker = () => {
               required
               data-testid="project-title-input"
             />
-
-            {/* <div>
-              <label className="block text-gray-300 text-sm font-medium mb-2">Link to Goal (Optional)</label>
-              <select
-                value={newProject.goalId}
-                onChange={(e) => setNewProject({ ...newProject, goalId: e.target.value })}
-                className="w-full bg-gray-700 text-white border border-gray-600 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-500"
-                data-testid="project-goal-select"
-              >
-                <option value="">No goal (independent)</option>
-                {goals.map(goal => (
-                  <option key={goal.id} value={goal.id}>{goal.title}</option>
-                ))}
-              </select>
-            </div> */}
 
             <InputField
               label="Deadline (Optional)"

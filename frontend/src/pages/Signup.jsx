@@ -11,7 +11,7 @@ import { showToast } from '../utils/toastHelper';
 
 
 const Signup = () => {
-  const { token, setToken, setUser, navigate } = useApp();
+  const { setToken, setUser, navigate } = useApp();
   const [formData, setFormData] = useState({
     name: '',
     username: '',

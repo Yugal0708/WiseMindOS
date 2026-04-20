@@ -1,17 +1,11 @@
 import { Flame, Clock } from 'lucide-react';
 import Card from './Card';
-import { motion } from 'framer-motion';
 import ToggleSwitch from './ToggleSwitch';
 
 const HabitCard = ({ habit, onComplete }) => {
-  // const isCompleted = habit.lastCompleted === new Date().toDateString();
   const isCompleted = new Date(habit.lastCompleted).toDateString() === new Date().toDateString();
 
   return (
-    // <motion.div
-    //   // whileTap={{ scale: 0.97 }}
-    //   whileHover={{ scale: isCompleted ? 1 : 1.03 }}
-    // >
       <Card
         className={`
           cursor-pointer transition-all duration-300

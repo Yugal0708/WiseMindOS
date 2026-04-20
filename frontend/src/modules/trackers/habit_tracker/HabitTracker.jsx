@@ -28,55 +28,7 @@ const HabitTracker = () => {
     setNewHabit({ name: '', type: 'build', startTime: '', endTime: '', mode: '21-day' });
     setShowAddHabit(false);
   };
-
-  // const handleCompleteHabit = (habitId) => {
-  //   const habit = habits.find(h => h.id === habitId);
-  //   if (!habit) return;
-
-  //   const today = new Date().toDateString();
-  //   const lastCompleted = habit.lastCompleted || null;
-
-  //   if (lastCompleted === today) {
-  //     // 🔁 UNDO today's completion
-
-  //     let newStreak = habit.streak > 0 ? habit.streak - 1 : 0;
-
-  //     // Set lastCompleted to yesterday (simulate rollback)
-  //     const yesterday = new Date();
-  //     yesterday.setDate(yesterday.getDate() - 1);
-
-  //     updateHabit(habitId, {
-  //       streak: newStreak,
-  //       lastCompleted: newStreak === 0 ? null : yesterday.toDateString()
-  //     });
-
-  //     return;
-  //   }
-
-  //   // Check if it's consecutive
-  //   const yesterday = new Date();
-  //   yesterday.setDate(yesterday.getDate() - 1);
-  //   const yesterdayStr = yesterday.toDateString();
-
-  //   let newStreak = habit.streak;
-  //   if (lastCompleted === yesterdayStr) {
-  //     // Consecutive day
-  //     newStreak = habit.streak + 1;
-  //   } else if (lastCompleted === null) {
-  //     // First time
-  //     newStreak = 1;
-  //   } else {
-  //     // Streak broken, restart
-  //     newStreak = 1;
-  //   }
-
-  //   updateHabit(habitId, {
-  //     streak: newStreak,
-  //     lastCompleted: new Date().toDateString()
-  //   });
-  // };
-
-
+  
   const buildHabits = habits.filter(h => h.type === 'build');
   const breakHabits = habits.filter(h => h.type === 'break');
 

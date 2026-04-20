@@ -61,25 +61,6 @@ const Landing = () => {
             />
 
             <div className="relative max-w-4xl mx-auto text-center">
-              {/* <div className="mb-8">
-                <motion.h1 className="text-4xl young-serif-regular md:text-7xl font-extrabold tracking-tight text-white mb-4 cursor-pointer" 
-                animate={{
-                  textShadow: [
-                    "0px 0px 0px rgba(99,102,241,0)",        // no glow
-                    "0px 0px 20px rgba(99,102,241,0.8)",     // glow
-                    "0px 0px 0px rgba(99,102,241,0)"         // back to normal
-                  ]
-                }}
-
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}>
-                  Wise<span className="bg-gradient-to-r text-5xl md:text-8xl baloo-2-700 from-indigo-500 to-purple-500 bg-clip-text text-transparent">Mind</span>OS
-                </motion.h1>
-                <div className="h-1 w-32 bg-gradient-to-r from-indigo-600 to-violet-600 mx-auto rounded-full"></div>
-              </div> */}
               <div className="mb-8 flex flex-col items-center">
 
                 {/* Logo */}

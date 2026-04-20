@@ -7,7 +7,7 @@ import { LogOut } from "lucide-react";
 const BottomNav = () => {
   const location = useLocation();
 
-  const { token, setToken, navigate } = useApp();
+  const { setToken, navigate } = useApp();
 
   const logout = () => {
     navigate('/login')

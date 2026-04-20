@@ -1,6 +1,5 @@
 import { Target, Calendar } from 'lucide-react';
 import Card from './Card';
-import DonutChart from './DonutChart';
 import ProgressBar from './ProgressBar';
 
 const GoalCard = ({ goal, progress, onClick }) => {

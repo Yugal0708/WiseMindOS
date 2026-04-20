@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Play, Pause, RotateCcw, X, CheckCircle2, ArrowRight, CalendarDays } from 'lucide-react';
 import { useApp } from '../../store/AppContext';
 import Card from '../../components/Card';
-import TaskItem from '../../components/TaskItem';
 import { motion } from 'framer-motion'
 import Bag from '../../components/Bag';
 import GradientButton from '../../components/GradientButton';
@@ -17,12 +16,6 @@ const FocusRoom = () => {
   const [isActive, setIsActive] = useState(false);
   const [mode, setMode] = useState('work'); // work, shortBreak, longBreak
   const [pomodoroCount, setPomodoroCount] = useState(0);
-
-  // Notes State
-  // const [notes, setNotes] = useState(() => {
-  //   const saved = localStorage.getItem('wisemind_focus_notes');
-  //   return saved || '';
-  // });
 
   useEffect(() => {
     let interval = null;
@@ -45,10 +38,6 @@ const FocusRoom = () => {
     }
     return () => clearInterval(interval);
   }, [isActive, minutes, seconds]);
-
-  // useEffect(() => {
-  //   localStorage.setItem('wisemind_focus_notes', notes);
-  // }, [notes]);
 
   const handleTimerComplete = () => {
     setIsActive(false);
@@ -105,8 +94,6 @@ const FocusRoom = () => {
     else if (newMode === 'shortBreak') setMinutes(5);
     else setMinutes(15);
   };
-
-  // const todayTasks = tasks.filter(t => !t.completed).slice(0, 5);
 
   // Get today's planned tasks from dailyPlan
   const todayPlannedTasks = dailyPlan?.plannedTasks || [];
@@ -331,18 +318,6 @@ hover:scale-110 active:scale-95 cursor-pointer transition-all"
                   ))}
                 </div>
               ) : (
-                // <div className="text-center py-8">
-                //   <div className="text-4xl mb-3">📅</div>
-                //   <p className="text-gray-400 mb-2">No tasks planned yet</p>
-                //   <p className="text-sm text-gray-500 mb-4">Plan your day to maximize focus</p>
-                //   <button
-                //     onClick={() => navigate('/trackers/daily-tasks')}
-                //     className="w-full px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:shadow-lg transition-all"
-                //     data-testid="plan-day-btn"
-                //   >
-                //     Plan Your Day
-                //   </button>
-                // </div>
                 <Card className="mb-6 bg-white/5 backdrop-blur-xl border border-white/10 shadow-[0_0_30px_rgba(99,102,241,0.15)]">
                   <div className="text-center py-8">
                     <CalendarDays size={48} className="text-indigo-400 mx-auto mb-3 drop-shadow-[0_0_10px_rgba(99,102,241,0.6)]" />

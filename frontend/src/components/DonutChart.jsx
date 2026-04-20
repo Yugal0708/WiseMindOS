@@ -7,7 +7,7 @@ const DonutChart = ({ value, size = 120, strokeWidth = 10, color = '#6366f1', la
     { name: 'remaining', value: 100 - percentage }
   ];
 
-  const COLORS = [color, '#374151'];
+  const COLORS = [color, '#1F2937'];
 
   return (
     <div className="flex flex-col items-center" data-testid="donut-chart">
@@ -18,7 +18,7 @@ const DonutChart = ({ value, size = 120, strokeWidth = 10, color = '#6366f1', la
               data={data}
               cx="50%"
               cy="50%"
-              innerRadius="70%"
+              innerRadius="55%"
               outerRadius="90%"
               startAngle={90}
               endAngle={-270}

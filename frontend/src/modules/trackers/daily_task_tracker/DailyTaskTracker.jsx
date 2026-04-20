@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Calendar, Clock, Plus, ListTodo, X, CheckCircle2, CalendarSyncIcon, CalendarClock, ClipboardList, CheckSquare } from 'lucide-react';
+import { Calendar, Clock, Plus, ListTodo, X, CheckCircle2, CalendarSyncIcon, CalendarClock } from 'lucide-react';
 import { useApp } from '../../../store/AppContext';
 import Card from '../../../components/Card';
 import DonutChart from '../../../components/DonutChart';
@@ -26,8 +26,6 @@ const DailyTaskTracker = () => {
 
   const [activeTab, setActiveTab] = useState('timeline'); // 'timeline' | 'add'
   const [addMode, setAddMode] = useState('tasks'); // 'tasks' | 'habits' | 'manual'
-  const [selectedTaskIds, setSelectedTaskIds] = useState([]);
-  const [showManualForm, setShowManualForm] = useState(false);
   const [activeView, setActiveView] = useState('timeline');
   const [manualTaskForm, setManualTaskForm] = useState({
     title: '',
@@ -75,49 +73,23 @@ const DailyTaskTracker = () => {
   );
 
   // Timeline sections
-  const morningTasks = dailyPlan.plannedTasks.filter(t => {
-    const hour = parseInt(t.startTime.split(':')[0]);
-    return hour >= 6 && hour < 12;
-  }).sort((a, b) => a.startTime.localeCompare(b.startTime));
+  // const morningTasks = dailyPlan.plannedTasks.filter(t => {
+  //   const hour = parseInt(t.startTime.split(':')[0]);
+  //   return hour >= 6 && hour < 12;
+  // }).sort((a, b) => a.startTime.localeCompare(b.startTime));
 
-  const afternoonTasks = dailyPlan.plannedTasks.filter(t => {
-    const hour = parseInt(t.startTime.split(':')[0]);
-    return hour >= 12 && hour < 18;
-  }).sort((a, b) => a.startTime.localeCompare(b.startTime));
+  // const afternoonTasks = dailyPlan.plannedTasks.filter(t => {
+  //   const hour = parseInt(t.startTime.split(':')[0]);
+  //   return hour >= 12 && hour < 18;
+  // }).sort((a, b) => a.startTime.localeCompare(b.startTime));
 
-  const eveningTasks = dailyPlan.plannedTasks.filter(t => {
-    const hour = parseInt(t.startTime.split(':')[0]);
-    return hour >= 18 || hour < 6;
-  }).sort((a, b) => a.startTime.localeCompare(b.startTime));
+  // const eveningTasks = dailyPlan.plannedTasks.filter(t => {
+  //   const hour = parseInt(t.startTime.split(':')[0]);
+  //   return hour >= 18 || hour < 6;
+  // }).sort((a, b) => a.startTime.localeCompare(b.startTime));
 
   const pendingCount = dailyPlan.plannedTasks.filter(t => !t.completed).length;
   const completedCount = dailyPlan.plannedTasks.filter(t => t.completed).length;
-
-  // Add tasks from task list
-  // const handleAddTasksToPlan = () => {
-  //   if (selectedTaskIds.length === 0) {
-  //     alert('Please select at least one task');
-  //     return;
-  //   }
-
-  //   selectedTaskIds.forEach(taskId => {
-  //     const task = tasks.find(t => t.id === taskId);
-  //     if (task) {
-  //       addToDailyPlan({
-  //         source: 'task',
-  //         taskId: task.id,
-  //         title: task.title,
-  //         startTime: task.deadline ? format(new Date(task.deadline), 'HH:mm') : '09:00',
-  //         endTime: task.deadline ? format(new Date(new Date(task.deadline).getTime() + 3600000), 'HH:mm') : '10:00',
-  //         completed: task.completed,
-  //         isImportant: task.isImportant
-  //       });
-  //     }
-  //   });
-
-  //   setSelectedTaskIds([]);
-  //   setActiveTab('timeline');
-  // };
 
   // Add habit to plan
   const handleAddHabitToPlan = (habit) => {
@@ -173,17 +145,8 @@ const DailyTaskTracker = () => {
       endTime: '10:00',
       isImportant: false
     });
-    setShowManualForm(false);
     setActiveTab('timeline');
     setActiveView('timeline');
-  };
-
-  const toggleTaskSelection = (taskId) => {
-    setSelectedTaskIds(prev =>
-      prev.includes(taskId)
-        ? prev.filter(id => id !== taskId)
-        : [...prev, taskId]
-    );
   };
 
   const handleAddTaskToPlan = async () => {
@@ -221,88 +184,6 @@ const DailyTaskTracker = () => {
     if (source === 'habit') return { label: 'Habit', color: 'bg-green-500/20 text-green-400 border-green-500/30' };
     return { label: 'Manual', color: 'bg-purple-500/20 text-purple-400 border-purple-500/30' };
   };
-
-  // const TimelineSection = ({ title, tasks: sectionTasks, icon, gradient }) => {
-  //   if (sectionTasks.length === 0) return null;
-
-  //   return (
-  //     <div className="mb-6">
-  //       <div className="flex items-center gap-2 mb-4">
-  //         {icon}
-  //         <h3 className={`text-lg font-semibold bg-gradient-to-r ${gradient} bg-clip-text text-transparent`}>
-  //           {title}
-  //         </h3>
-  //         <span className="text-sm text-gray-500">({sectionTasks.length})</span>
-  //       </div>
-  //       <div className="space-y-3 pl-6 border-l-2 border-gray-700">
-  //         {sectionTasks.map((item, index) => (
-  //           <motion.div
-  //             key={item.id}
-  //             initial={{ opacity: 0, x: -20 }}
-  //             animate={{ opacity: 1, x: 0 }}
-  //             transition={{ delay: index * 0.05 }}
-  //             className="relative"
-  //           >
-  //             {/* Timeline dot */}
-  //             <div className="absolute -left-[27px] top-4 w-3 h-3 rounded-full bg-indigo-500 border-2 border-gray-900" />
-
-  //             <Card className={`${item.completed ? 'opacity-60' : ''} bg-white/5 backdrop-blur-lg border border-white/10 hover:border-indigo-500/50 transition-all`}>
-  //               <div className="flex items-start gap-3">
-  //                 {/* Time */}
-  //                 <div className="text-center min-w-[60px]">
-  //                   <p className="text-xs text-indigo-400 font-semibold">{item.startTime}</p>
-  //                   <p className="text-xs text-gray-500">{item.endTime}</p>
-  //                 </div>
-
-  //                 {/* Content */}
-  //                 <div className="flex-1">
-  //                   <div className="flex items-start justify-between gap-3 mb-2">
-  //                     <div className="flex-1">
-  //                       <h4 className={`font-medium ${item.completed ? 'line-through text-gray-500' : 'text-white'}`}>
-  //                         {item.title}
-  //                       </h4>
-  //                       <div className="flex items-center gap-2 mt-1">
-  //                         <span className={`text-xs px-2 py-0.5 rounded-full border ${getSourceBadge(item.source).color}`}>
-  //                           {getSourceBadge(item.source).label}
-  //                         </span>
-  //                         {item.isImportant && (
-  //                           <span className="text-xs px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30">
-  //                             Important
-  //                           </span>
-  //                         )}
-  //                       </div>
-  //                     </div>
-
-  //                     {/* Actions */}
-  //                     <div className="flex items-center gap-2">
-  //                       <button
-  //                         onClick={() => toggleDailyPlanTaskCompletion(item.id)}
-  //                         className={`p-2 rounded-lg transition-all ${item.completed
-  //                           ? 'bg-green-500/20 text-green-400'
-  //                           : 'bg-gray-700/50 text-gray-400 hover:bg-green-500/20 hover:text-green-400'
-  //                           }`}
-  //                         data-testid={`complete-daily-task-${item.id}`}
-  //                       >
-  //                         <CheckCircle2 size={20} />
-  //                       </button>
-  //                       <button
-  //                         onClick={() => removeFromDailyPlan(item.id)}
-  //                         className="p-2 rounded-lg bg-gray-700/50 text-gray-400 hover:bg-red-500/20 hover:text-red-400 transition-all"
-  //                         data-testid={`remove-daily-task-${item.id}`}
-  //                       >
-  //                         <X size={20} />
-  //                       </button>
-  //                     </div>
-  //                   </div>
-  //                 </div>
-  //               </div>
-  //             </Card>
-  //           </motion.div>
-  //         ))}
-  //       </div>
-  //     </div>
-  //   );
-  // };
 
   return (
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8 }}>
@@ -431,29 +312,6 @@ const DailyTaskTracker = () => {
                       </div>
                     </div>
                   </Card>
-
-                  {/* Timeline Sections */}
-                  {/* <TimelineSection
-                    title="Morning"
-                    tasks={morningTasks}
-                    icon={<span className="text-2xl">🌅</span>}
-                    gradient="from-yellow-400 to-orange-500"
-                  />
-
-                  <TimelineSection
-                    title="Afternoon"
-                    tasks={afternoonTasks}
-                    icon={<span className="text-2xl">☀️</span>}
-                    gradient="from-orange-400 to-red-500"
-                  />
-
-                  <TimelineSection
-                    title="Evening"
-                    tasks={eveningTasks}
-                    icon={<span className="text-2xl">🌙</span>}
-                    gradient="from-indigo-400 to-purple-500"
-                  /> */}
-
 
                   {/* Tab Navigation */}
                   <div className="flex gap-2 mb-6">
@@ -642,9 +500,6 @@ const DailyTaskTracker = () => {
                           transition={{ delay: index * 0.05 }}
                           className="relative"
                         >
-                          {/* Timeline dot
-                          <div className="absolute -left-[27px] top-4 w-3 h-3 rounded-full bg-indigo-500 border-2 border-gray-900" /> */}
-
                           <div className="bg-white/5 rounded-lg shadow-lg backdrop-blur-lg p-3 border border-white/10 hover:border-white/50 transition-all">
                             <div className="flex items-start gap-3">
                               {/* Time */}
@@ -807,7 +662,6 @@ const DailyTaskTracker = () => {
                         {availableTasks.map(task => (
                           <motion.div
                             key={task.id}
-                            // onClick={() => toggleTaskSelection(task.id)}
                             onClick={() => {
                               setSelectedTask(task);
                               setShowTimeModal(true);
@@ -817,12 +671,6 @@ const DailyTaskTracker = () => {
                             data-testid={`select-task-${task.id}`}
                           >
                             <div className="flex items-center gap-3">
-                              {/* <input
-                                type="checkbox"
-                                checked={selectedTaskIds.includes(task.id)}
-                                onChange={() => {}}
-                                className="w-5 h-5"
-                              /> */}
                               <div className="flex-1">
                                 <p className="text-white font-medium">{task.title}</p>
                                 {task.deadline && (
@@ -835,14 +683,6 @@ const DailyTaskTracker = () => {
                           </motion.div>
                         ))}
                       </div>
-                      {/* <GradientButton
-                        onClick={handleAddTasksToPlan}
-                        className="w-full"
-                        disabled={selectedTaskIds.length === 0}
-                        data-testid="add-selected-tasks-btn"
-                      >
-                        Add {selectedTaskIds.length > 0 ? `(${selectedTaskIds.length})` : ''} Tasks to Plan
-                      </GradientButton> */}
                     </>
                   ) : (
                     <div className="text-center py-8">

@@ -39,7 +39,7 @@ const InputField = ({
           "
         />
 
-        {/* 👁️ Eye Toggle */}
+        {/* Eye Toggle */}
         {isPassword && (
           <button
             type="button"

@@ -1,14 +1,16 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
+import './App.css';
+
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-import Dashboard from './pages/Dashboard';
-import FutureTwin from './modules/simulator_room/FutureTwin';
-import AppLayout from './layouts/AppLayout';
-import './App.css';
-
 import Onboarding from './pages/Onboarding';
+import AppLayout from './layouts/AppLayout';
+import Dashboard from './pages/Dashboard';
+import Reports from './pages/Reports';
 
+
+import FutureTwin from './modules/simulator_room/FutureTwin';
 import Trackers from './modules/trackers/Trackers';
 import GoalTracker from './modules/trackers/goal_tracker/GoalTracker';
 import ProjectTracker from './modules/trackers/project_tracker/ProjectTracker';
@@ -17,8 +19,8 @@ import HabitTracker from './modules/trackers/habit_tracker/HabitTracker';
 import DailyTaskTracker from './modules/trackers/daily_task_tracker/DailyTaskTracker';
 import FocusRoom from './modules/focus_room/FocusRoom';
 import Library from './modules/library_room/Library';
-import { useApp } from './store/AppContext';
 
+import { useApp } from './store/AppContext';
 import { ToastContainer } from 'react-toastify';
 
   function App() {
@@ -32,6 +34,7 @@ import { ToastContainer } from 'react-toastify';
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/onboarding" element={<Onboarding />} />
+          <Route path="/report" element={<Reports />} />
 
           {/* Protected Routes with AppLayout */}
           <Route element={<AppLayout />}>
