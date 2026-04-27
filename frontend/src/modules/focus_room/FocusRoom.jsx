@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Play, Pause, RotateCcw, X, CheckCircle2, ArrowRight, CalendarDays } from 'lucide-react';
+import { Play, Pause, RotateCcw, CheckCircle2, CalendarDays, LucideTrophy } from 'lucide-react';
 import { useApp } from '../../store/AppContext';
 import Card from '../../components/Card';
 import { motion } from 'framer-motion'
@@ -274,7 +274,7 @@ hover:scale-110 active:scale-95 cursor-pointer transition-all"
             <Card className='bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_0_40px_rgba(99,102,241,0.15)]'>
 
               <h2 className="text-xl font-bold text-white mb-4">Today's Planned Tasks</h2>
-              {hasPlannedTasks ? (
+              {hasPlannedTasks && pendingPlannedTasks.length > 0 ? (
                 <div className="space-y-3 max-h-[600px] overflow-y-auto">
                   {pendingPlannedTasks.map((item, index) => (
                     <motion.div
@@ -317,7 +317,7 @@ hover:scale-110 active:scale-95 cursor-pointer transition-all"
                     </motion.div>
                   ))}
                 </div>
-              ) : (
+              ) : !hasPlannedTasks ? (
                 <Card className="mb-6 bg-white/5 backdrop-blur-xl border border-white/10 shadow-[0_0_30px_rgba(99,102,241,0.15)]">
                   <div className="text-center py-8">
                     <CalendarDays size={48} className="text-indigo-400 mx-auto mb-3 drop-shadow-[0_0_10px_rgba(99,102,241,0.6)]" />
@@ -333,6 +333,22 @@ hover:scale-110 active:scale-95 cursor-pointer transition-all"
                   </div>
                 </Card>
 
+              ) : hasPlannedTasks && pendingPlannedTasks.length == 0 && (
+                <Card className="mb-6 bg-white/5 backdrop-blur-xl border border-white/10 shadow-[0_0_30px_rgba(99,102,241,0.15)]">
+                  <div className="text-center py-8">
+                    <LucideTrophy size={48} className="text-indigo-400 mx-auto mb-3 drop-shadow-[0_0_10px_rgba(99,102,241,0.6)]" />
+                    <h3 className="text-xl font-bold text-white mb-2">"Hooray !!"</h3>
+                    <h3 className="text-xl font-bold text-white mb-2">All tasks for today is completed.</h3>
+                    <p className="text-gray-400 mb-4">
+                      Plan Ahead, Keep pushing yourself...
+                    </p>
+                    <Link to="/trackers/daily-tasks">
+                      <GradientButton data-testid="plan-now-btn">
+                        Plan Ahead
+                      </GradientButton>
+                    </Link>
+                  </div>
+                </Card>
               )}
             </Card>
           </div>
