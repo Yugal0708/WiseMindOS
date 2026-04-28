@@ -159,9 +159,9 @@ const Dashboard = () => {
         >
           <Card className="mb-6 w-full  relative overflow-hidden bg-white/15 backdrop-blur-xl border-20 border-black/20 shadow-[0_0_40px_rgba(99,102,241,0.2)]">
 
-            <div className="rounded w-full mb-6 p-4 flex flex-col items-center">
+            <div className="rounded w-full mb-6 flex flex-col items-center">
               <div className='w-full flex items-end justify-end'>
-                <button onClick={() => setShowEditProfile(true)} className='bg-white/10 hover:bg-white/15 cursor-pointer border flex gap-2 border-white/15 hover:border-white/25 hover:translate-y-0.5 px-4 py-2 text-white rounded-2xl default-bold shadow-[0_0_10px_rgba(255,255,255,0.2)] hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] transition-all duration-300'> <UserPen size={20} /> <span>Edit</span></button>
+                <button onClick={() => setShowEditProfile(true)} className='bg-white/10 hover:bg-white/15 cursor-pointer border flex gap-2 border-white/15 hover:border-white/25 hover:translate-y-0.5 px-3 py-3 rounded-full text-white default-bold shadow-[0_0_10px_rgba(255,255,255,0.2)] hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] transition-all duration-300'> <UserPen size={20} /></button>
               </div>
               {/* Image div  */}
               <div className='h-30 w-30 rounded-full relative group border-6 border-black/15 shadow-[0_0_40px_rgba(99,102,241,0.2)] shrink-0'>
@@ -174,7 +174,7 @@ const Dashboard = () => {
                 <div className='border-6 h-5 w-5 rounded-full z-10 bottom-1 absolute right-1 border-green-400'></div>
               </div>
               <div className='flex flex-col items-center'>
-                <span className='text-3xl md:text-4xl default-bold text-gray-100'>{user.name || 'User'}</span>
+                <span className='text-3xl md:text-4xl text-center default-bold text-gray-100'>{user.name || 'User'}</span>
                 <span className='cursor-pointer text-sm text-gray-300'>@{user.username || 'username'}</span>
               </div>
             </div>
