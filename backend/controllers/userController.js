@@ -1,4 +1,5 @@
 import userModel from "../models/userModel.js";
+import imagekit from "../config/imagekit.js"
 import validator from 'validator'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
@@ -34,7 +35,7 @@ const loginUser = async (req, res) => {
 
         if (isMatch) {
             const token = createToken(user._id)
-            return res.json({ success: true, message: "Login Successful", token, name: user.name, email: user.email, username: user.username, bio: user.bio })
+            return res.json({ success: true, message: "Login Successful", token, name: user.name, email: user.email, username: user.username, bio: user.bio, profile_picture: user.profile_picture })
         }
         else {
             return res.json({ success: false, message: "Invalid Credentials" })
@@ -94,7 +95,7 @@ const registerUser = async (req, res) => {
 
         const token = createToken(user._id)
 
-        res.json({ success: true, token, bio: user.bio, message: 'Account Created Successfully!' })
+        res.json({ success: true, token, bio: user.bio,  message: 'Account Created Successfully!' })
 
 
     } catch (error) {
@@ -146,6 +147,51 @@ const updateUser = async (req, res) => {
             isModified = true;
         }
 
+
+        const profile = req.files.profile && req.files.profile[0]
+        // const cover = req.files.cover && req.files.cover[0]
+        // const profile = req.files?.profile?.[0]
+        // const cover = req.files?.cover?.[0]
+
+        if(profile){
+            const buffer = fs.readFileSync(profile.path)
+            const response = await imagekit.upload({
+                file: buffer,
+                fileName: profile.originalname,
+            })
+
+            const url = imagekit.url({
+                path: response.filePath,
+                transformation: [
+                    {quality: 'auto'},
+                    {format: 'webp'},
+                    {width: '512'}
+                ]
+            })
+            user.profile_picture = url;
+            isModified = true;
+        }
+        
+        // if(cover){
+        //     const buffer = fs.readFileSync(cover.path)
+        //     const response = await imagekit.upload({
+        //         file: buffer,
+        //         fileName: cover.originalname,
+        //     })
+
+        //     const url = imagekit.url({
+        //         path: response.filePath,
+        //         transformation: [
+        //             {quality: 'auto'},
+        //             {format: 'webp'},
+        //             {width: '1280'}
+        //         ]
+        //     })
+        //     user.cover_photo = url;
+        //     isModified = true;
+        // }
+
+
         if (!isModified) {
             return res.json({ success: true, message: "No changes made" });
         }
@@ -160,7 +206,8 @@ const updateUser = async (req, res) => {
                 name: updatedUser.name,
                 username: updatedUser.username,
                 bio: updatedUser.bio,
-                email: updatedUser.email
+                email: updatedUser.email,
+                profile_picture: updatedUser.profile_picture,
             }
         });
 

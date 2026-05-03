@@ -198,7 +198,7 @@ const Dashboard = () => {
               </div>
               {/* Image div  */}
               <div className='h-30 w-30 rounded-full relative group border-6 border-black/15 shadow-[0_0_40px_rgba(99,102,241,0.2)] shrink-0'>
-                <img src={user.profile_pic || profile_pic} className='w-full h-full object-cover rounded-full' alt="" />
+                <img src={user.profile_picture || profile_pic} className='w-full h-full object-cover rounded-full' alt="" />
                 <div className='w-full h-full bg-black/50 absolute rounded-full inset-0 cursor-pointer opacity-0 z-10 group-hover:opacity-100'>
                   <div className='h-full w-full flex items-center justify-center'>
                     <Camera size={18} className='text-white' />
