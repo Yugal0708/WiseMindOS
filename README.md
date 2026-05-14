@@ -99,10 +99,32 @@ The following systems are planned for future releases:
 
 # Project Architecture
 
+# Project Architecture
+
 ```text
 WiseMindOS/
 │
+├── .github/
+│   ├── ISSUE_TEMPLATE/
+│   │   ├── bug_report.md
+│   │   ├── documentation.md
+│   │   └── feature_request.md
+│   │
+│   └── PULL_REQUEST_TEMPLATE.md
+│
+├── backend/
+│   ├── config/
+│   ├── controllers/
+│   ├── middleware/
+│   ├── models/
+│   ├── routes/
+│   ├── utils/
+│   ├── package.json
+│   ├── package-lock.json
+│   └── server.js
+│
 ├── frontend/
+│   ├── public/
 │   ├── src/
 │   │   ├── api/
 │   │   ├── assets/
@@ -114,18 +136,16 @@ WiseMindOS/
 │   │   ├── routes/
 │   │   └── utils/
 │   │
-│   └── public/
+│   ├── package.json
+│   ├── package-lock.json
+│   └── vite.config.js
 │
-├── backend/
-│   ├── config/
-│   ├── controllers/
-│   ├── middleware/
-│   ├── models/
-│   ├── routes/
-│   ├── utils/
-│   └── server.js
 │
-└── README.md
+├── CONTRIBUTING.md
+├── CODE_OF_CONDUCT.md
+├── LICENSE
+├── README.md
+└── .gitignore
 ```
 
 ---
@@ -318,9 +338,9 @@ Beginner-friendly issues and contribution guidelines will be maintained for new 
 # Repository Structure
 
 ```text
-frontend/   React frontend application
-backend/    Express backend APIs and database models
-docs/       Contributor and project documentation
+.github/        GitHub issue templates and pull request templates
+backend/        Express backend APIs, middleware, models, and server logic
+frontend/       React frontend application and UI components
 ```
 
 ---
