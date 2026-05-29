@@ -63,7 +63,6 @@ const Login = () => {
         localStorage.setItem('wisemind_user', JSON.stringify(userData));
 
         showToast({ message: response.message || 'Login Successful', status: "success" })
-        navigate('/dashboard');
       } else {
         setError(response.message || 'Login failed');
         showToast({ message: response.message || 'Login failed', status: 'error'})
@@ -79,10 +78,10 @@ const Login = () => {
   };
 
   useEffect(() => {
-    if (token) {
-      navigate('/');
-    }
-  }, [token])
+      if (token && user) {
+        navigate('/dashboard');
+      }
+  }, [token, user, navigate]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black flex items-center justify-center px-4 py-12 relative overflow-hidden">
