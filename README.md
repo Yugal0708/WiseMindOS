@@ -36,6 +36,31 @@ While traditional tools offer fragmented task tracking, WiseMindOS unifies goals
 The ecosystem is scaling toward an intelligent productivity framework powered by **FutureTwin**—a personalized AI assistant that evaluates user analytics, counters behavioral friction, and continuously optimizes your daily trajectory toward high-level milestones.
 
 ---
+# Screenshots
+<div align="center">
+   
+## Dashboard
+![Dashboard](assets/screenshots/Dashboard.jpeg)
+*A central view that shows overall productivity insights, including goals progress, tasks, habits, and performance analytics in one place.*
+
+
+## Trackers
+![Trackers](assets/screenshots/Trackers.jpeg)
+*It monitors habits, tasks, and goals to measure consistency, progress, and productivity over time.*
+
+
+## FutureTwin
+![FutureTwinAI](assets/screenshots/FutureTwinAI.jpeg)
+*An intelligent assistant that analyzes user behavior and productivity patterns to provide personalized recommendations and improve daily performance.*
+
+
+## Library
+![Library](assets/screenshots/YourLibrary.jpeg)
+*A personal knowledge space to store, organize, and revisit notes, ideas, and important information in a structured way.*
+
+</div>
+
+---
 
 # Core Features
 
