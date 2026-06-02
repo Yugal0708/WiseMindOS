@@ -60,27 +60,27 @@ const ClockWidget = () => {
 
 const TimeBlock = ({ value }) => {
   return (
-    <motion.div
+    <div
       className="
-        px-3 py-2 rounded-lg
-        bg-gradient-to-b from-indigo-500/20 to-purple-500/20
+        px-4 py-3 rounded-xl
+        bg-[#1a1b2e]/80 backdrop-blur-md
         border border-white/10
-        shadow-[0_0_10px_rgba(99,102,241,0.4)]
+        shadow-[inset_0_0_20px_rgba(99,102,241,0.05),0_0_15px_rgba(99,102,241,0.1)]
+        hover:shadow-[inset_0_0_25px_rgba(99,102,241,0.2),0_0_20px_rgba(99,102,241,0.2)]
+        hover:bg-[#1a1b2e] transition-all duration-300 ease-in-out
       "
-      animate={{ scale: [1, 1.05, 1] }}
-      transition={{ duration: 1, repeat: Infinity }}
     >
       {value}
-    </motion.div>
+    </div>
   );
 };
 
 const BlinkColon = () => {
   return (
     <motion.span
-      className="text-indigo-400"
-      animate={{ opacity: [1, 0, 1] }}
-      transition={{ duration: 1, repeat: Infinity }}
+      className="text-indigo-400/80 drop-shadow-[0_0_8px_rgba(99,102,241,0.5)]"
+      animate={{ opacity: [1, 0.3, 1] }}
+      transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
     >
       :
     </motion.span>

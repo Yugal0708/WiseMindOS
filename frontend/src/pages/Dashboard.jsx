@@ -280,15 +280,15 @@ const Dashboard = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <Card className="mb-6 w-full  relative overflow-hidden bg-white/15 backdrop-blur-xl border-20 border-black/20 shadow-[0_0_40px_rgba(99,102,241,0.2)]">
+          <Card className="mb-6 w-full relative overflow-hidden bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-2xl border border-white/20 shadow-[0_8px_32px_0_rgba(31,38,135,0.37),0_0_40px_rgba(99,102,241,0.15)]">
 
             <div className="rounded w-full mb-6 flex flex-col items-center">
               <div className='w-full flex items-end justify-end'>
                 <button onClick={() => setShowEditProfile(true)} className='bg-white/10 hover:bg-white/15 cursor-pointer border flex gap-2 border-white/15 hover:border-white/25 hover:translate-y-0.5 px-3 py-3 rounded-full text-white default-bold shadow-[0_0_10px_rgba(255,255,255,0.2)] hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] transition-all duration-300'> <UserPen size={20} /></button>
               </div>
               {/* Image div  */}
-              <div className='h-30 w-30 rounded-full relative group border-6 border-black/15 shadow-[0_0_40px_rgba(99,102,241,0.2)] shrink-0'>
-                <img src={user.profile_picture || profile_pic} className='w-full h-full object-cover rounded-full' alt="" />
+              <div className='h-30 w-30 rounded-full relative group p-[3px] bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 shadow-[0_0_25px_rgba(99,102,241,0.6)] shrink-0'>
+                <img src={user.profile_picture || profile_pic} className='w-full h-full object-cover rounded-full border-[3px] border-gray-900' alt="" />
                 <div onClick={()=>setShowEditProfilePic(true)} className='w-full h-full bg-black/50 absolute rounded-full inset-0 cursor-pointer opacity-0 z-10 group-hover:opacity-100'>
                   <div className='h-full w-full flex items-center justify-center'>
                     <Camera size={18} className='text-white' />
@@ -298,25 +298,25 @@ const Dashboard = () => {
               </div>
               <div className='flex flex-col items-center'>
                 <span className='text-3xl md:text-4xl text-center default-bold text-gray-100'>{user.name || 'User'}</span>
-                <span className='cursor-pointer text-sm text-gray-300'>@{user.username || 'username'}</span>
+                <span className='cursor-pointer text-sm text-slate-400'>@{user.username || 'username'}</span>
               </div>
             </div>
 
-            <div className='text-gray-400 mb-6'>{user.bio || 'Add Bio'}</div>
+            <div className='text-slate-400 mb-6'>{user.bio || 'Add Bio'}</div>
 
             <div className='flex flex-wrap justify-around gap-4 mb-4'>
               <div className="text-center">
                 <p className="text-lg font-bold text-indigo-400">{productivityScore}%</p>
-                <p className="text-xs text-gray-400">Productivity</p>
+                <p className="text-xs text-slate-400">Productivity</p>
               </div>
 
               <div className="text-center">
                 <p className="text-lg font-bold text-green-400">{disciplineScore}%</p>
-                <p className="text-xs text-gray-400">Discipline</p>
+                <p className="text-xs text-slate-400">Discipline</p>
               </div>
             </div>
 
-            <GradientButton className="w-full h-full flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(99,102,241,0.5)]">
+            <GradientButton className="w-full h-full flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(99,102,241,0.3)] hover:shadow-[0_0_30px_rgba(99,102,241,0.6)] hover:scale-[1.03] transform-gpu transition-all duration-300 ease-in-out">
               <UserPlus2 size={20} />
               <span>Connect</span>
             </GradientButton>
