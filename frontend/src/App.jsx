@@ -31,8 +31,8 @@ import ErrorPage from './pages/ErrorPage';
     const { token } = useApp();
     return (
       <>
-        <ToastContainer position="top-right" autoClose={3000} />
         <ErrorBoundary fallback={<ErrorPage />}>
+        <ToastContainer position="top-right" autoClose={3000} />
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={token ? <Navigate to="/dashboard" replace /> : <Landing />} />
