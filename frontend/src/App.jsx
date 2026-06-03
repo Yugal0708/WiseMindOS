@@ -62,8 +62,7 @@ import ErrorPage from './pages/ErrorPage';
           {/* Fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-        </ErrorBoundary>
-      </>
+      </ErrorBoundary>
     );
   }
 
