@@ -11,6 +11,7 @@ import Reports from './pages/Reports';
 import Roadmap from './pages/Roadmap';
 import Careers from './pages/Careers';
 import Contact from './pages/Contact';
+import About from './pages/About'; // <-- IMPORT ABOUT PAGE HERE
 
 
 import FutureTwin from './modules/simulator_room/FutureTwin';
@@ -44,6 +45,7 @@ import ErrorPage from './pages/ErrorPage';
           <Route path="/roadmap" element={<Roadmap />} />
           <Route path="/careers" element={<Careers />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/about" element={<About />} /> {/* <-- ADD ROUTE HERE */}
 
           {/* Protected Routes with AppLayout */}
           <Route element={<AppLayout />}>
@@ -65,6 +67,7 @@ import ErrorPage from './pages/ErrorPage';
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </ErrorBoundary>
+      </> // <-- Note: added missing closing fragment from original code
     );
   }
 
