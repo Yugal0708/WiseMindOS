@@ -108,7 +108,8 @@ const Dashboard = () => {
   const productivityInsights = useMemo(() => {
     const completedDailyTasks = todayPlannedTasks.filter(task => task.completed).length;
     const completedTasks = tasks.filter(task => task.completed || task.status === 'completed').length;
-    const completedHabits = habits.filter(habit => habit.completed).length;
+    const isToday = (date) => new Date(date).toISOString().split('T')[0] === new Date().toISOString().split('T')[0];
+    const completedHabits = habits.filter(habit => habit.lastCompleted && isToday(habit.lastCompleted)).length;
     const goalProgressValues = goals.map(goal => {
       const progress = calculateGoalProgress(goal.id);
       return progress || Number(goal.progress) || 0;
@@ -169,7 +170,7 @@ const Dashboard = () => {
     {
       title: 'Habit Completion',
       value: `${productivityInsights.habitCompletion}%`,
-      detail: `${habits.filter(habit => habit.completed).length}/${habits.length || 0} habits done`,
+      detail: `${habits.filter(habit => habit.lastCompleted && isToday(habit.lastCompleted)).length}/${habits.length || 0} habits done`,
       icon: <Activity size={22} />,
       accent: 'from-emerald-500/25 to-teal-500/10',
       text: 'text-emerald-300',
