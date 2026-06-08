@@ -59,7 +59,7 @@ const getHabits = async (req, res, next) => {
 // Update Habit
 const updateHabit = async (req, res, next) => {
     try {
-        const { habitId, name, type, startTime, endTime, mode, streak, lastCompleted } = req.body;
+        const { habitId, name, type, startTime, endTime, mode } = req.body;
         const userId = req.body.userId;
 
         if (!habitId) {
@@ -76,9 +76,6 @@ const updateHabit = async (req, res, next) => {
         if (startTime !== undefined) habit.startTime = startTime;
         if (endTime !== undefined) habit.endTime = endTime;
         if (mode) habit.mode = mode;
-        if (streak) habit.streak = streak;
-        if (lastCompleted) habit.lastCompleted = lastCompleted;
-
         await habit.save();
         res.json({ success: true, habit, message: 'Habit Updated Successfully' });
 
