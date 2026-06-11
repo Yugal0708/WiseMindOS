@@ -97,14 +97,8 @@ export const AppProvider = ({ children }) => {
 
 
 
-  // BACKEND INTEGRATION: Load initial data when token is available
-  useEffect(() => {
-    if (token && user) {
-      loadInitialData();
-    }
-  }, [token, user]);
 
-  const loadInitialData = async () => {
+  async function loadInitialData() {
     try {
       setLoading(true);
 
@@ -180,8 +174,14 @@ export const AppProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }
 
+  // BACKEND INTEGRATION: Load initial data when token is available
+  useEffect(() => {
+    if (token && user) {
+      loadInitialData();
+    }
+  }, [token, user]);
 
   const updateUser = async (updates) => {
     try {
