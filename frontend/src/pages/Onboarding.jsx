@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../store/AppContext';
 import Card from '../components/Card';
@@ -12,11 +12,46 @@ const Onboarding = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const { addGoal, addProject, addTask, goals: savedGoals } = useApp();
-  const [step, setStep] = useState(1);
-  const [goals, setGoals] = useState([]);
-  const [currentGoal, setCurrentGoal] = useState({ title: '', type: 'mid-term' });
-  const [executionMap, setExecutionMap] = useState({}); // goalId -> { projects: [], tasks: [] }
-  const [currentExecution, setCurrentExecution] = useState({ type: 'task', title: '', deadline: '' });
+  const [step, setStep] = useState(() => {
+    const saved = localStorage.getItem('wisemind_onboarding_step');
+    return saved ? parseInt(saved, 10) : 1;
+  });
+  const [goals, setGoals] = useState(() => {
+    const saved = localStorage.getItem('wisemind_onboarding_goals');
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [currentGoal, setCurrentGoal] = useState(() => {
+    const saved = localStorage.getItem('wisemind_onboarding_current_goal');
+    return saved ? JSON.parse(saved) : { title: '', type: 'mid-term' };
+  });
+  const [executionMap, setExecutionMap] = useState(() => {
+    const saved = localStorage.getItem('wisemind_onboarding_execution_map');
+    return saved ? JSON.parse(saved) : {};
+  });
+  const [currentExecution, setCurrentExecution] = useState(() => {
+    const saved = localStorage.getItem('wisemind_onboarding_current_execution');
+    return saved ? JSON.parse(saved) : { type: 'task', title: '', deadline: '' };
+  });
+
+  useEffect(() => {
+    localStorage.setItem('wisemind_onboarding_step', step.toString());
+  }, [step]);
+
+  useEffect(() => {
+    localStorage.setItem('wisemind_onboarding_goals', JSON.stringify(goals));
+  }, [goals]);
+
+  useEffect(() => {
+    localStorage.setItem('wisemind_onboarding_current_goal', JSON.stringify(currentGoal));
+  }, [currentGoal]);
+
+  useEffect(() => {
+    localStorage.setItem('wisemind_onboarding_execution_map', JSON.stringify(executionMap));
+  }, [executionMap]);
+
+  useEffect(() => {
+    localStorage.setItem('wisemind_onboarding_current_execution', JSON.stringify(currentExecution));
+  }, [currentExecution]);
   const [goalError, setGoalError] = useState('');
   const today = new Date();
   const minDeadline = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
@@ -87,7 +122,17 @@ const Onboarding = () => {
   };
 
   // Step 2: Map Goals to Execution
-  const [selectedGoalForMapping, setSelectedGoalForMapping] = useState(null);
+  const [selectedGoalForMapping, setSelectedGoalForMapping] = useState(() => {
+    return localStorage.getItem('wisemind_onboarding_selected_goal') || null;
+  });
+
+  useEffect(() => {
+    if (selectedGoalForMapping) {
+      localStorage.setItem('wisemind_onboarding_selected_goal', selectedGoalForMapping);
+    } else {
+      localStorage.removeItem('wisemind_onboarding_selected_goal');
+    }
+  }, [selectedGoalForMapping]);
 
   const handleAddExecution = () => {
     if (!currentExecution.title.trim() || !selectedGoalForMapping) return;
@@ -180,6 +225,14 @@ const Onboarding = () => {
 
     // Set onboarding flag
     localStorage.setItem('wisemind_hasOnboarded', 'true');
+
+    // Clear onboarding progress states
+    localStorage.removeItem('wisemind_onboarding_step');
+    localStorage.removeItem('wisemind_onboarding_goals');
+    localStorage.removeItem('wisemind_onboarding_current_goal');
+    localStorage.removeItem('wisemind_onboarding_execution_map');
+    localStorage.removeItem('wisemind_onboarding_current_execution');
+    localStorage.removeItem('wisemind_onboarding_selected_goal');
 
     // Navigate to dashboard
     setTimeout(() => {
