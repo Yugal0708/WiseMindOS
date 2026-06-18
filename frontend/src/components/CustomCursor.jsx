@@ -27,18 +27,19 @@ export default function CustomCursor() {
       ringX += (mouseX - ringX) * 0.15;
       ringY += (mouseY - ringY) * 0.15;
       if (ringRef.current) {
-        ringRef.current.style.transform = `translate(${ringX - 18}px, ${ringY - 18}px)`;
+        const size = ringRef.current.offsetWidth;
+        ringRef.current.style.transform = `translate(${ringX - size / 2}px, ${ringY - size / 2}px)`;
       }
       rafId = requestAnimationFrame(animate);
     };
 
     const onEnter = () => {
-      ringRef.current?.classList.add("scale-150", "opacity-100", "border-violet-400");
-      ringRef.current?.classList.remove("opacity-60", "border-violet-600");
+      ringRef.current?.classList.add("opacity-100", "border-violet-400", "w-12", "h-12");
+      ringRef.current?.classList.remove("opacity-60", "border-violet-600", "w-9", "h-9");
     };
     const onLeave = () => {
-      ringRef.current?.classList.remove("scale-150", "opacity-100", "border-violet-400");
-      ringRef.current?.classList.add("opacity-60", "border-violet-600");
+      ringRef.current?.classList.remove("opacity-100", "border-violet-400", "w-12", "h-12");
+      ringRef.current?.classList.add("opacity-60", "border-violet-600", "w-9", "h-9");
     };
 
     const interactiveEls = document.querySelectorAll("a, button, [data-cursor-hover]");
