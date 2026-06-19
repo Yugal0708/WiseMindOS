@@ -1,7 +1,7 @@
 import dailyStatsModel from '../models/dailyStatsModel.js';
 
 // SAVE TODAY'S STATS
-const saveDailyStats = async (req, res) => {
+const saveDailyStats = async (req, res, next) => {
   try {
     const { productivity, discipline } = req.body;
     const userId = req.body.userId || req.headers.userid;
@@ -29,14 +29,13 @@ const saveDailyStats = async (req, res) => {
     res.json({ success: true });
 
   } catch (error) {
-    console.log(error);
-    res.json({ success: false, message: error.message });
-  }
+        next(error);
+    }
 };
 
 
 // ✅ GET LAST 7 DAYS STATS
-const getWeeklyStats = async (req, res) => {
+const getWeeklyStats = async (req, res, next) => {
   try {
     const userId = req.body.userId || req.headers.userid;
 
@@ -50,9 +49,8 @@ const getWeeklyStats = async (req, res) => {
     res.json({ success: true, data: stats });
 
   } catch (error) {
-    console.log(error);
-    res.json({ success: false, message: error.message });
-  }
+        next(error);
+    }
 };
 
 

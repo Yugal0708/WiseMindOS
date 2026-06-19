@@ -1,20 +1,25 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../store/AppContext';
 import Card from '../components/Card';
 import GradientButton from '../components/GradientButton';
 import InputField from '../components/InputField';
 import { motion } from 'framer-motion';
+import { getGoalDuplicateError, isDuplicateGoalTitle } from '../utils/helpers';
+import { showToast } from "../utils/toastHelper";
 
 const Onboarding = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const { addGoal, addProject, addTask } = useApp();
+  const { addGoal, addProject, addTask, goals: savedGoals } = useApp();
   const [step, setStep] = useState(1);
   const [goals, setGoals] = useState([]);
   const [currentGoal, setCurrentGoal] = useState({ title: '', type: 'mid-term' });
   const [executionMap, setExecutionMap] = useState({}); // goalId -> { projects: [], tasks: [] }
   const [currentExecution, setCurrentExecution] = useState({ type: 'task', title: '', deadline: '' });
+  const [goalError, setGoalError] = useState('');
+  const today = new Date();
+  const minDeadline = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
 
   const predefinedGoals = [
     'Software Developer',
@@ -27,25 +32,43 @@ const Onboarding = () => {
     'Better Sleep Schedule'
   ];
 
-  // Step 1: Add Goals
-  const handleAddGoal = () => {
-    if (!currentGoal.title.trim()) return;
-    const newGoal = {
-      id: `temp-${Date.now()}`,
-      title: currentGoal.title,
-      type: currentGoal.type
-    };
-    setGoals([...goals, newGoal]);
-    setCurrentGoal({ title: '', type: 'mid-term' });
+  const allExistingGoals = useMemo(
+    () => [...savedGoals, ...goals],
+    [savedGoals, goals]
+  );
+
+  const tryAddGoal = (title, type = 'mid-term') => {
+    const trimmedTitle = title.trim();
+    if (!trimmedTitle) return false;
+
+    const duplicateError = getGoalDuplicateError(trimmedTitle, allExistingGoals);
+    if (duplicateError) {
+      setGoalError(duplicateError);
+      return false;
+    }
+
+    setGoals([
+      ...goals,
+      {
+        id: crypto.randomUUID(),
+        title: trimmedTitle,
+        type
+      }
+    ]);
+    setGoalError('');
+    return true;
   };
 
+  // Step 1: Add Goals (manual input)
+  const handleAddGoal = () => {
+    if (tryAddGoal(currentGoal.title, currentGoal.type)) {
+      setCurrentGoal({ title: '', type: 'mid-term' });
+    }
+  };
+
+  // Step 1: Add Goals (predefined suggestion)
   const handleAddPredefinedGoal = (goalTitle) => {
-    const newGoal = {
-      id: `temp-${Date.now()}`,
-      title: goalTitle,
-      type: 'mid-term'
-    };
-    setGoals([...goals, newGoal]);
+    tryAddGoal(goalTitle, 'mid-term');
   };
 
   const handleRemoveGoal = (goalId) => {
@@ -68,18 +91,22 @@ const Onboarding = () => {
 
   const handleAddExecution = () => {
     if (!currentExecution.title.trim() || !selectedGoalForMapping) return;
+    if (currentExecution.deadline && currentExecution.deadline < minDeadline) {
+      showToast({message: 'Deadline cannot be earlier than today', status: "error"})
+      return;
+    }
 
     const goalMap = executionMap[selectedGoalForMapping] || { projects: [], tasks: [] };
 
     if (currentExecution.type === 'project') {
       goalMap.projects.push({
-        id: `temp-${Date.now()}`,
+        id: crypto.randomUUID(),
         title: currentExecution.title,
         deadline: currentExecution.deadline
       });
     } else {
       goalMap.tasks.push({
-        id: `temp-${Date.now()}`,
+        id: crypto.randomUUID(),
         title: currentExecution.title,
         deadline: currentExecution.deadline
       });
@@ -89,19 +116,42 @@ const Onboarding = () => {
     setCurrentExecution({ type: 'task', title: '', deadline: '' });
   };
 
+  const handleRemoveExecution = (goalId, type, itemId) => {
+    setExecutionMap(prevMap => {
+      const goalMap = prevMap[goalId];
+      if (!goalMap) return prevMap;
+
+      const key = type === 'project' ? 'projects' : 'tasks';
+      const updatedGoalMap = {
+        ...goalMap,
+        [key]: goalMap[key].filter(item => item.id !== itemId)
+      };
+
+      const newMap = { ...prevMap, [goalId]: updatedGoalMap };
+
+      // Remove the goal entry entirely if it no longer has any execution items
+      if (updatedGoalMap.projects.length === 0 && updatedGoalMap.tasks.length === 0) {
+        delete newMap[goalId];
+      }
+
+      return newMap;
+    });
+  };
+
   const handleStep2Next = () => {
     setStep(3);
   };
 
   // Step 3: Initialize System
-  const handleFinishOnboarding = () => {
+  const handleFinishOnboarding = async () => {
     setLoading(true);
-    // Create all goals
     const goalIdMap = {};
-    goals.forEach(goal => {
-      const createdGoal = addGoal(goal);
+
+    for (const goal of goals) {
+      const createdGoal = await addGoal(goal);
+      if (!createdGoal) continue;
       goalIdMap[goal.id] = createdGoal.id;
-    });
+    }
 
     // Create all projects and tasks
     Object.keys(executionMap).forEach(tempGoalId => {
@@ -237,7 +287,10 @@ shadow-[0_0_40px_rgba(99,102,241,0.2)]
                     <InputField
                       label="Goal Title"
                       value={currentGoal.title}
-                      onChange={(e) => setCurrentGoal({ ...currentGoal, title: e.target.value })}
+                      onChange={(e) => {
+                        setCurrentGoal({ ...currentGoal, title: e.target.value });
+                        if (goalError) setGoalError('');
+                      }}
                       placeholder="Enter goal title"
                       data-testid="goal-title-input"
                     />
@@ -255,6 +308,11 @@ shadow-[0_0_40px_rgba(99,102,241,0.2)]
                       </select>
                     </div>
                   </div>
+                  {goalError && (
+                    <p className="text-sm text-red-400" role="alert" data-testid="goal-duplicate-error">
+                      {goalError}
+                    </p>
+                  )}
                   <button
                     onClick={handleAddGoal}
                     className="w-full py-3 bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 hover:shadow-[0_0_20px_rgba(99,102,241,0.6)]  hover:-translate-y-1 active:scale-95 transition-all duration-300
@@ -296,21 +354,26 @@ hover:scale-[1.01] transition-all rounded-lg"
                 <div className="mb-6">
                   <h3 className="text-white font-semibold mb-3">Or choose from suggestions:</h3>
                   <div className="grid grid-cols-2 gap-2">
-                    {predefinedGoals.map(goal => (
+                    {predefinedGoals.map(goal => {
+                      const alreadyAdded = isDuplicateGoalTitle(goal, allExistingGoals);
+                      return (
                       <button
                         key={goal}
+                        type="button"
                         onClick={() => handleAddPredefinedGoal(goal)}
-                        className="
-p-3 text-sm 
-bg-white/5 text-gray-200 backdrop-blur-lg border border-white/10
-hover:scale-[1.02] hover:bg-white/10
-transition-all duration-300 rounded-lg
-"
+                        disabled={alreadyAdded}
+                        className={`
+p-3 text-sm backdrop-blur-lg border border-white/10 rounded-lg transition-all duration-300
+${alreadyAdded
+  ? 'bg-white/5 text-gray-500 cursor-not-allowed opacity-60'
+  : 'bg-white/5 text-gray-200 hover:scale-[1.02] hover:bg-white/10'}
+`}
                         data-testid={`predefined-goal-${goal.toLowerCase().replace(/\s+/g, '-')}`}
                       >
                         {goal}
                       </button>
-                    ))}
+                    );
+                    })}
                   </div>
                 </div>
 
@@ -377,6 +440,7 @@ transition-all duration-300 rounded-lg
                       <InputField
                         label="Deadline (Optional)"
                         type="date"
+                        min={minDeadline}
                         value={currentExecution.deadline}
                         onChange={(e) => setCurrentExecution({ ...currentExecution, deadline: e.target.value })}
                         data-testid="execution-deadline-input"
@@ -414,7 +478,22 @@ text-white rounded-lg
                             <div className="mb-2">
                               <p className="text-xs text-gray-500 mb-1">Projects:</p>
                               {map.projects.map(p => (
-                                <p key={p.id} className="text-sm text-gray-300 ml-3">• {p.title}</p>
+                                <div
+                                  key={p.id}
+                                  className="flex items-center justify-between ml-3"
+                                  data-testid={`mapped-project-${p.id}`}
+                                >
+                                  <p className="text-sm text-gray-300">• {p.title}</p>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleRemoveExecution(goal.id, 'project', p.id)}
+                                    className="text-xs text-red-400 hover:text-red-300 transition-colors"
+                                    aria-label={`Remove project ${p.title}`}
+                                    data-testid={`remove-project-${p.id}`}
+                                  >
+                                    Remove
+                                  </button>
+                                </div>
                               ))}
                             </div>
                           )}
@@ -422,7 +501,22 @@ text-white rounded-lg
                             <div>
                               <p className="text-xs text-gray-500 mb-1">Tasks:</p>
                               {map.tasks.map(t => (
-                                <p key={t.id} className="text-sm text-gray-300 ml-3">• {t.title}</p>
+                                <div
+                                  key={t.id}
+                                  className="flex items-center justify-between ml-3"
+                                  data-testid={`mapped-task-${t.id}`}
+                                >
+                                  <p className="text-sm text-gray-300">• {t.title}</p>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleRemoveExecution(goal.id, 'task', t.id)}
+                                    className="text-xs text-red-400 hover:text-red-300 transition-colors"
+                                    aria-label={`Remove task ${t.title}`}
+                                    data-testid={`remove-task-${t.id}`}
+                                  >
+                                    Remove
+                                  </button>
+                                </div>
                               ))}
                             </div>
                           )}
