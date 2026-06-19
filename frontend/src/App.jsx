@@ -30,12 +30,14 @@ import { useApp } from './store/AppContext';
 import { ToastContainer } from 'react-toastify';
 import ErrorBoundary from './components/ErrorBoundary';
 import ErrorPage from './pages/ErrorPage';
+import CustomCursor from './components/CustomCursor';
 
 function App() {
   const { token } = useApp();
 
   return (
     <ErrorBoundary fallback={<ErrorPage />}>
+        <CustomCursor />
         <ToastContainer position="top-right" autoClose={3000} />
         <Routes>
           {/* Public Routes */}
