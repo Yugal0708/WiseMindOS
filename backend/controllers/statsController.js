@@ -10,43 +10,20 @@ const saveDailyStats = async (req, res, next) => {
       return res.json({ success: false, message: 'Scores are required' });
     }
 
-    // ✅ Normalize date (IMPORTANT for unique index)
-    const start = new Date();
-    start.setUTCHours(0, 0, 0, 0);
-
-    const end = new Date();
-    end.setUTCHours(23, 59, 59, 999);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
     await dailyStatsModel.findOneAndUpdate(
-      {
-        userId,
-        date: { $gte: start, $lte: end }
-      },
+      { userId, date: today },
       {
         productivity,
-        discipline,
-        date: start // always save normalized
+        discipline
       },
       {
         upsert: true,
         new: true
       }
     );
-    
-    // const today = new Date();
-    // today.setHours(0, 0, 0, 0);
-
-    // await dailyStatsModel.findOneAndUpdate(
-    //   { userId, date: today },
-    //   {
-    //     productivity,
-    //     discipline
-    //   },
-    //   {
-    //     upsert: true,
-    //     new: true
-    //   }
-    // );
 
 
     res.json({ success: true });
@@ -64,11 +41,10 @@ const getWeeklyStats = async (req, res, next) => {
 
     const lastWeek = new Date();
     lastWeek.setDate(lastWeek.getDate() - 7);
-    lastWeek.setUTCHours(0, 0, 0, 0);
 
     const stats = await dailyStatsModel
       .find({ userId, date: { $gte: lastWeek } })
-      .sort({ date: 1 }); // oldest → newest
+      .sort({ date: 1 });
 
     res.json({ success: true, data: stats });
 
