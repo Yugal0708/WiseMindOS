@@ -97,6 +97,8 @@ const deleteProject = async (req, res, next) => {
             return res.json({ success: false, message: 'Project not found' });
         }
 
+        await taskModel.updateMany({ userId, projectId }, { $set: { projectId: null } });
+
         res.json({ success: true, message: 'Project deleted successfully' });
 
     } catch (error) {
